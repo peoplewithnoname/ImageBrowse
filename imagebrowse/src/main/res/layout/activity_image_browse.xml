@@ -7,9 +7,10 @@
         android:id="@+id/ivShare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
         android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:minHeight="200dp"
+        android:scaleType="fitXY"
         android:visibility="visible" />
 
     <com.caihao.imagebrowse.ExtendedViewPager
@@ -18,5 +19,15 @@
         android:layout_height="match_parent"
         android:background="#000000"
         android:visibility="gone"></com.caihao.imagebrowse.ExtendedViewPager>
+
+    <TextView
+        android:id="@+id/tvCurr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
 
     private ImageView ivShare;//用于共享动画的ImageView
     private ViewPager pager;//图片的容器
+    private TextView tvCurr;
 
     private ImageBrowseAdapter adapter;
 
@@ -46,7 +49,9 @@ public class ImageBrowseActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
 
         activity = this;
         setContentView(R.layout.activity_image_browse);
@@ -57,11 +62,15 @@ public class ImageBrowseActivity extends AppCompatActivity {
         //初始化控件
         ivShare = findViewById(R.id.ivShare);
         pager = findViewById(R.id.pager);
+        tvCurr = findViewById(R.id.tvCurr);
 //        setShareLayout();//设置共享图片控件的大小
         ImageBrowseUtils.loadImage(this, urlList.get(index), ivShare);
         ViewCompat.setTransitionName(ivShare, ImageBrowseUtils.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
         pager.setCurrentItem(index);
+        if (urlList.size() > 1) {
+            tvCurr.setText((index+1) + "/" + urlList.size());
+        }
         //设置监听
         initLisenter();
     }
@@ -77,6 +86,9 @@ public class ImageBrowseActivity extends AppCompatActivity {
             public void onPageSelected(int i) {
                 index = i;
                 ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
+                if (urlList.size() > 1) {
+                    tvCurr.setText((index+1) + "/" + urlList.size());
+                }
                 if (callback != null) callback.setIndex(index);
             }
 
@@ -85,28 +97,30 @@ public class ImageBrowseActivity extends AppCompatActivity {
 
             }
         });
-        setEnterSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                pager.setVisibility(View.VISIBLE);
-                isAnimInit = true;
-            }
-
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                super.onMapSharedElements(names, sharedElements);
-                if (isAnimInit) {
-                    View view = adapter.getItem(index);
-                    ViewCompat.setTransitionName(view, ImageBrowseUtils.TRANSITION + index);
-                    names.clear();
-                    names.add(ImageBrowseUtils.TRANSITION + index);
-                    sharedElements.clear();
-                    sharedElements.put(names.get(0), view);
-                    Log.e("TAG", "name = " + names.get(0));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setEnterSharedElementCallback(new SharedElementCallback() {
+                @Override
+                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+                    pager.setVisibility(View.VISIBLE);
+                    isAnimInit = true;
                 }
-            }
-        });
+
+                @Override
+                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                    super.onMapSharedElements(names, sharedElements);
+                    if (isAnimInit) {
+                        View view = adapter.getItem(index);
+                        ViewCompat.setTransitionName(view, ImageBrowseUtils.TRANSITION + index);
+                        names.clear();
+                        names.add(ImageBrowseUtils.TRANSITION + index);
+                        sharedElements.clear();
+                        sharedElements.put(names.get(0), view);
+                        Log.e("TAG", "name = " + names.get(0));
+                    }
+                }
+            });
+        }
     }
 
     public void setShareLayout() {
