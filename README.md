@@ -98,7 +98,7 @@ setExitSharedElementCallback(new SharedElementCallback() {
         
         ImageBrowseUtils.TRANSITION 是一个常量  index为下标
         
-        不知道onMapSharedElements的同学可以去补补5.0的转场动画  叫共享元素 来的
+        不知道onMapSharedElements的同学可以去看看5.0的转场动画  叫共享元素 来的
  
 ```
 
