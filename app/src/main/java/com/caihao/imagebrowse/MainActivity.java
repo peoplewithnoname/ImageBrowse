@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 names.add(ImageBrowseUtils.TRANSITION + index);
                 sharedElements.clear();
                 sharedElements.put(names.get(0), view);
+                Log.e("TAG", "name = " + names.get(0));
             }
         });
         ImageBrowseBus.getInstance().save(TAG, new ImageBrowseCallback() {
