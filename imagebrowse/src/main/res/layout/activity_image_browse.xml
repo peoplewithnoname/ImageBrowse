@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:minHeight="200dp"
         android:scaleType="fitXY"
         android:visibility="visible" />
 

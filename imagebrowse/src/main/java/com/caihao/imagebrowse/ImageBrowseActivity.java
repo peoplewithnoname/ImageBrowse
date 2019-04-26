@@ -63,13 +63,14 @@ public class ImageBrowseActivity extends AppCompatActivity {
         ivShare = findViewById(R.id.ivShare);
         pager = findViewById(R.id.pager);
         tvCurr = findViewById(R.id.tvCurr);
+        ivShare.setMinimumHeight(getWindowWidth());
 //        setShareLayout();//设置共享图片控件的大小
         ImageBrowseUtils.loadImage(this, urlList.get(index), ivShare);
         ViewCompat.setTransitionName(ivShare, ImageBrowseUtils.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
         pager.setCurrentItem(index);
         if (urlList.size() > 1) {
-            tvCurr.setText((index+1) + "/" + urlList.size());
+            tvCurr.setText((index + 1) + "/" + urlList.size());
         }
         //设置监听
         initLisenter();
@@ -87,7 +88,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
                 index = i;
                 ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
                 if (urlList.size() > 1) {
-                    tvCurr.setText((index+1) + "/" + urlList.size());
+                    tvCurr.setText((index + 1) + "/" + urlList.size());
                 }
                 if (callback != null) callback.setIndex(index);
             }
@@ -127,7 +128,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) ivShare.getLayoutParams();
         layoutParams.width = getWindowWidth();
         layoutParams.height = getWindowWidth();
-//        ivShare.setLayoutParams(layoutParams);
+        ivShare.setLayoutParams(layoutParams);
     }
 
     //-----------------------------------------------------------------------
