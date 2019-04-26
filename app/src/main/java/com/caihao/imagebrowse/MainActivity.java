@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ImageBrowseUtils.setImageLoader(new GlideImageLoader());
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+                GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
                 View itemView = manager.findViewByPosition(position);
                 View view = itemView.findViewById(R.id.ivCover);
                 String transitionName = ImageBrowseUtils.TRANSITION + position;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 super.onMapSharedElements(names, sharedElements);
-                StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+                GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
                 View itemView = manager.findViewByPosition(index);
                 View view = itemView.findViewById(R.id.ivCover);
                 String transitionName = ImageBrowseUtils.TRANSITION + index;

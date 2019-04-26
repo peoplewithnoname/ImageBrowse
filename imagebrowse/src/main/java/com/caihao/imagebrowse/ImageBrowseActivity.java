@@ -57,7 +57,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
         //初始化控件
         ivShare = findViewById(R.id.ivShare);
         pager = findViewById(R.id.pager);
-        setShareLayout();//设置共享图片控件的大小
+//        setShareLayout();//设置共享图片控件的大小
         ImageBrowseUtils.loadImage(this, urlList.get(index), ivShare);
         ViewCompat.setTransitionName(ivShare, ImageBrowseUtils.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
