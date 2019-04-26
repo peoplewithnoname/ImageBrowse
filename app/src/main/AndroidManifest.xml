@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.caihao.imagebrowse">
+    package="com.caihao.simple">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ImageBrowseActivity"
+            android:name="com.caihao.imagebrowse.ImageBrowseActivity"
             android:screenOrientation="portrait" />
     </application>
 

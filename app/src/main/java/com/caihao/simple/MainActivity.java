@@ -1,11 +1,12 @@
-package com.caihao.imagebrowse;
+package com.caihao.simple;
 
 import android.app.SharedElementCallback;
 import android.graphics.Rect;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import com.caihao.imagebrowse.ImageBrowseBus;
+import com.caihao.imagebrowse.ImageBrowseCallback;
+import com.caihao.imagebrowse.ImageBrowseUtils;
+import com.caihao.simple.R;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import java.util.ArrayList;
@@ -62,32 +67,33 @@ public class MainActivity extends AppCompatActivity {
                 GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
                 View itemView = manager.findViewByPosition(position);
                 View view = itemView.findViewById(R.id.ivCover);
-                String transitionName = ImageBrowseUtils.TRANSITION + position;
                 index = position;
-                ViewCompat.setTransitionName(view, transitionName);
                 List<String> urlList = new ArrayList<>();
                 for (int i = 0; i < adapter.getCount(); i++) {
                     urlList.add(urls[i]);
                 }
                 new ImageBrowseUtils.Builder().setKey(TAG).setIndex(index).setUrlList(urlList).builder().start(MainActivity.this, view);
+//                new ImageBrowseUtils.Builder().setKey(TAG).addUrl(urlList.get(position)).builder().start(MainActivity.this, view);
             }
         });
-        setExitSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                super.onMapSharedElements(names, sharedElements);
-                GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
-                View itemView = manager.findViewByPosition(index);
-                View view = itemView.findViewById(R.id.ivCover);
-                String transitionName = ImageBrowseUtils.TRANSITION + index;
-                ViewCompat.setTransitionName(view, transitionName);
-                names.clear();
-                names.add(ImageBrowseUtils.TRANSITION + index);
-                sharedElements.clear();
-                sharedElements.put(names.get(0), view);
-                Log.e("TAG", "name = " + names.get(0));
-            }
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setExitSharedElementCallback(new SharedElementCallback() {
+                @Override
+                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                    super.onMapSharedElements(names, sharedElements);
+                    GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
+                    View itemView = manager.findViewByPosition(index);
+                    View view = itemView.findViewById(R.id.ivCover);
+                    String transitionName = ImageBrowseUtils.TRANSITION + index;
+                    ViewCompat.setTransitionName(view, transitionName);
+                    names.clear();
+                    names.add(ImageBrowseUtils.TRANSITION + index);
+                    sharedElements.clear();
+                    sharedElements.put(names.get(0), view);
+                    Log.e("TAG", "name = " + names.get(0));
+                }
+            });
+        }
         ImageBrowseBus.getInstance().save(TAG, new ImageBrowseCallback() {
             @Override
             public void setIndex(int index) {

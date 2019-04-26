@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -51,6 +52,7 @@ public class ImageBrowseUtils {
      * @param view
      */
     public void start(Activity activity, View view) {
+        ViewCompat.setTransitionName(view, TRANSITION + index);
         Intent intent = new Intent(activity, ImageBrowseActivity.class);
         intent.putExtra("key", key);
         intent.putExtra("urlList", (Serializable) urlList);
@@ -74,7 +76,7 @@ public class ImageBrowseUtils {
             return this;
         }
 
-        public Builder setUrl(String url) {
+        public Builder addUrl(String url) {
             if (urlList == null) urlList = new ArrayList<>();
             urlList.add(url);
             return this;
