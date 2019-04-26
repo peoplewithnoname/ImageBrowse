@@ -156,6 +156,8 @@ setExitSharedElementCallback(new SharedElementCallback() {
    ImageBrowseUtils.setImageLoader(new GlideImageLoader());
 ```
 
+### 如果加载本地图片需要读写权限  6.0以上在查看大图之前先申请好权限
+
 ## 访问链接可以下载demo
 
 ### https://fir.im/1cmn
