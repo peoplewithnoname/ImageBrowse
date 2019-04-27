@@ -2,6 +2,7 @@ package com.caihao.imagebrowse;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
@@ -31,7 +32,11 @@ public class ImageBrowseAdapter extends PagerAdapter {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Activity) context).finishAfterTransition();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ((Activity) context).finishAfterTransition();
+                    } else {
+                        ((Activity) context).finish();
+                    }
                 }
             });
             viewList.add(imageView);
