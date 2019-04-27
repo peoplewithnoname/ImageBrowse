@@ -8,4 +8,6 @@ public interface ImageLoader {
 
     void load(Context context, String path, ImageView imageView);
 
+    void load(Context context, String path, ImageLoadCallback callback);
+
 }
