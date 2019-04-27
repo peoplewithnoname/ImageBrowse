@@ -14,7 +14,7 @@ allprojects-repositories————》
 ```javascript
 dependencies————》
 
-implementation 'com.github.peoplewithnoname:ImageBrowse:1.0.2'
+implementation 'com.github.peoplewithnoname:ImageBrowse:1.0.2.1'
  
 ```
 
