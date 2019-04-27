@@ -2,6 +2,7 @@ package com.caihao.imagebrowse;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
@@ -27,8 +28,13 @@ public class ImageBrowseAdapter extends PagerAdapter {
         this.urlList = urlList;
         viewList = new ArrayList<>();
         for (int i = 0; i < urlList.size(); i++) {
-            ImageView imageView = new TouchImageView(context);
-            ImageBrowseUtils.loadImage(context, urlList.get(i), imageView);
+            final ImageView imageView = new TouchImageView(context);
+            ImageBrowseUtils.loadImage(context, urlList.get(i), new ImageLoadCallback() {
+                @Override
+                public void loadOver(Drawable drawable) {
+                    imageView.setImageDrawable(drawable);
+                }
+            });
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

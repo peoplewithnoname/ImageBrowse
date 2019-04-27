@@ -14,6 +14,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import com.caihao.imagebrowse.ActivityRegisterCallback;
+import com.caihao.imagebrowse.ActivityRegisterUtils;
+import com.caihao.imagebrowse.AfterIndexCallback;
 import com.caihao.imagebrowse.ImageBrowseBus;
 import com.caihao.imagebrowse.ImageBrowseCallback;
 import com.caihao.imagebrowse.ImageBrowseUtils;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
             , "https://ws1.sinaimg.cn/large/0065oQSqgy1fwyf0wr8hhj30ie0nhq6p.jpg", "https://ws1.sinaimg.cn/large/0065oQSqgy1fwgzx8n1syj30sg15h7ew.jpg"};
 
     private int index = -1;
+
+    ActivityRegisterUtils activityRegisterUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,57 +81,30 @@ public class MainActivity extends AppCompatActivity {
 //                new ImageBrowseUtils.Builder().setKey(TAG).addUrl(urlList.get(position)).builder().start(MainActivity.this, view);
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setExitSharedElementCallback(new SharedElementCallback() {
-                @Override
-                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                    super.onMapSharedElements(names, sharedElements);
-                    GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
-                    View itemView = manager.findViewByPosition(index);
-                    View view = itemView.findViewById(R.id.ivCover);
-                    String transitionName = ImageBrowseUtils.TRANSITION + index;
-                    ViewCompat.setTransitionName(view, transitionName);
-                    names.clear();
-                    names.add(ImageBrowseUtils.TRANSITION + index);
-                    sharedElements.clear();
-                    sharedElements.put(names.get(0), view);
-                    Log.e("TAG", "name = " + names.get(0));
-                }
-            });
-        }
-        ImageBrowseBus.getInstance().save(TAG, new ImageBrowseCallback() {
-            @Override
-            public void setIndex(int index) {
-                MainActivity.this.index = index;
-                scrollToPosition(index);
-            }
-        });
+
+        activityRegisterUtils = new ActivityRegisterUtils.Builder()
+                .activity(this)
+                .activityRegisterCallback(activityRegisterCallback)
+                .afterIndexCallback(afterIndexCallback)
+                .build();
+        activityRegisterUtils.register(TAG);
     }
 
-    /**
-     * RecyclerView滚动到指定位置
-     *
-     * @param position
-     */
-    public void scrollToPosition(int position) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            GridLayoutManager manager = (GridLayoutManager) layoutManager;
-            int firstItem = manager.findFirstVisibleItemPosition();
-            int lastItem = manager.findLastVisibleItemPosition();
-            if (position < firstItem || position > lastItem) {
-                recyclerView.smoothScrollToPosition(index);
-            }
-        } else if (layoutManager instanceof LinearLayoutManager) {
-            LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
-            int firstItem = manager.findFirstVisibleItemPosition();
-            int lastItem = manager.findLastVisibleItemPosition();
-            if (position < firstItem || position > lastItem) {
-                recyclerView.smoothScrollToPosition(index);
-            }
-        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+    ActivityRegisterCallback activityRegisterCallback = new ActivityRegisterCallback() {
+        @Override
+        public View getView(int index) {
+            GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
+            View itemView = manager.findViewByPosition(index);
+            View view = itemView.findViewById(R.id.ivCover);
+            return view;
+        }
+    };
+
+    AfterIndexCallback afterIndexCallback = new AfterIndexCallback() {
+        @Override
+        public void after(int index) {
             recyclerView.smoothScrollToPosition(index);
         }
-    }
+    };
 
 }

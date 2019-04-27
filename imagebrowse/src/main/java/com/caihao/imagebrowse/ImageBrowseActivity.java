@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -45,10 +47,6 @@ public class ImageBrowseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
@@ -65,10 +63,17 @@ public class ImageBrowseActivity extends AppCompatActivity {
         tvCurr = findViewById(R.id.tvCurr);
         ivShare.setMinimumHeight(getWindowWidth());
 //        setShareLayout();//设置共享图片控件的大小
-        ImageBrowseUtils.loadImage(this, urlList.get(index), ivShare);
+        ImageBrowseUtils.loadImage(this, urlList.get(index), new ImageLoadCallback() {
+            @Override
+            public void loadOver(Drawable drawable) {
+                ivShare.setImageDrawable(drawable);
+            }
+        });
         ViewCompat.setTransitionName(ivShare, ImageBrowseUtils.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
         pager.setCurrentItem(index);
+        ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
+        if (callback != null) callback.setIndex(index);
         if (urlList.size() > 1) {
             tvCurr.setText((index + 1) + "/" + urlList.size());
         }

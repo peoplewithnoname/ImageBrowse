@@ -6,8 +6,12 @@ import android.widget.ImageView;
 
 public interface ImageLoader {
 
-    void load(Context context, String path, ImageView imageView);
-
+    /**
+     * 图片加载 该方法必须重写
+     * @param context
+     * @param path
+     * @param callback
+     */
     void load(Context context, String path, ImageLoadCallback callback);
 
 }

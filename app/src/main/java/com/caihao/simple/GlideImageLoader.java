@@ -15,16 +15,6 @@ import com.caihao.imagebrowse.ImageLoader;
 public class GlideImageLoader implements ImageLoader {
 
     @Override
-    public void load(Context context, String path, final ImageView imageView) {
-        Glide.with(context).asDrawable().load(path).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                if (resource != null) imageView.setImageDrawable(resource);
-            }
-        });
-    }
-
-    @Override
     public void load(Context context, String path, final ImageLoadCallback callback) {
         Glide.with(context).asDrawable().load(path).into(new SimpleTarget<Drawable>() {
             @Override

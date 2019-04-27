@@ -32,10 +32,6 @@ public class ImageBrowseUtils {
 
     private List<String> urlList;
 
-    public static void loadImage(Context context, String path, ImageView imageView) {
-        ImageBrowseUtils.imageLoader.load(context, path, imageView);
-    }
-
     public static void loadImage(Context context, String path, ImageLoadCallback callback) {
         ImageBrowseUtils.imageLoader.load(context, path, callback);
     }
