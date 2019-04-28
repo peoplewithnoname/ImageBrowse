@@ -164,14 +164,14 @@ public class ImageBrowseTools {
      * @param view
      * @param index
      */
-    public void start(View view, String url, int index) {
+    public void start(View view, String url) {
         if (TextUtils.isEmpty(url)) {
             Toast.makeText(activity, "图片链接不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         List<String> urlList = new ArrayList<>();
         urlList.add(url);
-        start(view, urlList, index);
+        start(view, urlList, 0);
     }
 
     public void setTag(String tag) {

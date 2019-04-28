@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 imageBrowseTools.setTag("1" + TAG);
                 imageBrowseTools.setAfterIndexCallback(null);
                 imageBrowseTools.setActivityRegisterCallback(null);
-                imageBrowseTools.start(ivClick, simpleUrl, 0);
+                imageBrowseTools.start(ivClick, simpleUrl);
                 //----------------------------------------
             }
         });
