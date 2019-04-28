@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
+import com.caihao.imagebrowse.utils.ImageBrowseTools;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class ImageBrowseAdapter extends PagerAdapter {
         viewList = new ArrayList<>();
         for (int i = 0; i < urlList.size(); i++) {
             final ImageView imageView = new TouchImageView(context);
-            ImageBrowseUtils.loadImage(context, urlList.get(i), new ImageLoadCallback() {
+            ImageBrowseTools.loadImage(context, urlList.get(i), new ImageLoadCallback() {
                 @Override
                 public void loadOver(Drawable drawable) {
                     imageView.setImageDrawable(drawable);

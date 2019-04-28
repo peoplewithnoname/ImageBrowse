@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.caihao.imagebrowse.utils.ImageBrowseTools;
+
 import java.util.List;
 import java.util.Map;
 
@@ -47,9 +49,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        setTransparentForWindow(this);
 
         activity = this;
         setContentView(R.layout.activity_image_browse);
@@ -63,13 +63,13 @@ public class ImageBrowseActivity extends AppCompatActivity {
         tvCurr = findViewById(R.id.tvCurr);
         ivShare.setMinimumHeight(getWindowWidth());
 //        setShareLayout();//设置共享图片控件的大小
-        ImageBrowseUtils.loadImage(this, urlList.get(index), new ImageLoadCallback() {
+        ImageBrowseTools.loadImage(this, urlList.get(index), new ImageLoadCallback() {
             @Override
             public void loadOver(Drawable drawable) {
                 ivShare.setImageDrawable(drawable);
             }
         });
-        ViewCompat.setTransitionName(ivShare, ImageBrowseUtils.TRANSITION + index);
+        ViewCompat.setTransitionName(ivShare, ImageBrowseTools.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
         pager.setCurrentItem(index);
         ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
@@ -117,9 +117,9 @@ public class ImageBrowseActivity extends AppCompatActivity {
                     super.onMapSharedElements(names, sharedElements);
                     if (isAnimInit) {
                         View view = adapter.getItem(index);
-                        ViewCompat.setTransitionName(view, ImageBrowseUtils.TRANSITION + index);
+                        ViewCompat.setTransitionName(view, ImageBrowseTools.TRANSITION + index);
                         names.clear();
-                        names.add(ImageBrowseUtils.TRANSITION + index);
+                        names.add(ImageBrowseTools.TRANSITION + index);
                         sharedElements.clear();
                         sharedElements.put(names.get(0), view);
                         Log.e("TAG", "name = " + names.get(0));
@@ -148,6 +148,21 @@ public class ImageBrowseActivity extends AppCompatActivity {
                 .getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
         return width;
+    }
+
+    /**
+     * 设置透明
+     */
+    private void setTransparentForWindow(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            activity.getWindow()
+                    .getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow()
+                    .setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
 }

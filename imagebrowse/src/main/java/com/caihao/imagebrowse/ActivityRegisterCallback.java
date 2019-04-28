@@ -8,6 +8,12 @@ import android.view.View;
 
 public interface ActivityRegisterCallback {
 
+    /**
+     * 获取需要执行动画的View
+     *
+     * @param index
+     * @return
+     */
     View getView(int index);
 
 }
