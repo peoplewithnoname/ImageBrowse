@@ -62,7 +62,7 @@ public class ImageBrowseBus {
         }
         ImageBrowseCallback callback = null;
         for (String strKey : map.keySet()) {
-            if (strKey.equals(key)) {
+            if (key.equals(strKey)) {
                 callback = map.get(key);
             }
         }
