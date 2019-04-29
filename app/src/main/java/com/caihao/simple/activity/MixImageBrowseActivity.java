@@ -112,11 +112,12 @@ public class MixImageBrowseActivity extends AppCompatActivity {
     AfterIndexCallback afterIndexCallback = new AfterIndexCallback() {
         @Override
         public void after(int index) {
-            if (TAG0.equals(imageBrowseTools.getTag())) {
-                mRecyclerView0.smoothScrollToPosition(index);
-            } else if (TAG1.equals(imageBrowseTools.getTag())) {
-                mRecyclerView1.smoothScrollToPosition(index);
-            }
+            //RecyclerView在ScrollView里面并不能滚动
+//            if (TAG0.equals(imageBrowseTools.getTag())) {
+//                mRecyclerView0.smoothScrollToPosition(index);
+//            } else if (TAG1.equals(imageBrowseTools.getTag())) {
+//                mRecyclerView1.smoothScrollToPosition(index);
+//            }
         }
     };
 
