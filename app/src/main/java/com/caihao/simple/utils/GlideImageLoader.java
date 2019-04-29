@@ -1,4 +1,4 @@
-package com.caihao.simple;
+package com.caihao.simple.utils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

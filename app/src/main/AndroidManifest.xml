@@ -11,13 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SingleImageBrowseActivity"
+            android:label="单张图片查看"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ManyImageBrowseActivity"
+            android:label="多张图片查看"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MixImageBrowseActivity"
+            android:label="混合多张图片查看"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.caihao.imagebrowse.ImageBrowseActivity"
             android:screenOrientation="portrait" />

@@ -13,10 +13,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.caihao.imagebrowse.utils.ImageBrowseTools;
@@ -62,47 +60,55 @@ public class ImageBrowseActivity extends AppCompatActivity {
         pager = findViewById(R.id.pager);
         tvCurr = findViewById(R.id.tvCurr);
         ivShare.setMinimumHeight(getWindowWidth());
-//        setShareLayout();//设置共享图片控件的大小
+        ViewCompat.setTransitionName(ivShare, ImageBrowseTools.TRANSITION + index);
         ImageBrowseTools.loadImage(this, urlList.get(index), new ImageLoadCallback() {
             @Override
             public void loadOver(Drawable drawable) {
                 ivShare.setImageDrawable(drawable);
             }
         });
-        ViewCompat.setTransitionName(ivShare, ImageBrowseTools.TRANSITION + index);
         pager.setAdapter(adapter = new ImageBrowseAdapter(activity, urlList));
         pager.setCurrentItem(index);
-        ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
-        if (callback != null) callback.setIndex(index);
-        if (urlList.size() > 1) {
-            tvCurr.setText((index + 1) + "/" + urlList.size());
-        }
+
         //设置监听
         initLisenter();
     }
 
     private void initLisenter() {
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
+        //多张骨片的时候需要技术回调
+        if (urlList.size() > 1) {//多张图片
+            tvCurr.setText((index + 1) + "/" + urlList.size());
+            ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
+            if (callback != null) callback.setIndex(index);
+        }
+        //设置动画和viewpager切换的监听
+        pager.addOnPageChangeListener(pageChangeListener);
+        setShareCallback();
+    }
 
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            index = i;
+            ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
+            if (urlList.size() > 1) {
+                tvCurr.setText((index + 1) + "/" + urlList.size());
             }
+            if (callback != null) callback.setIndex(index);
+        }
 
-            @Override
-            public void onPageSelected(int i) {
-                index = i;
-                ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);
-                if (urlList.size() > 1) {
-                    tvCurr.setText((index + 1) + "/" + urlList.size());
-                }
-                if (callback != null) callback.setIndex(index);
-            }
+        @Override
+        public void onPageScrollStateChanged(int i) {
 
-            @Override
-            public void onPageScrollStateChanged(int i) {
+        }
+    };
 
-            }
-        });
+    private void setShareCallback() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setEnterSharedElementCallback(new SharedElementCallback() {
                 @Override
@@ -122,18 +128,13 @@ public class ImageBrowseActivity extends AppCompatActivity {
                         names.add(ImageBrowseTools.TRANSITION + index);
                         sharedElements.clear();
                         sharedElements.put(names.get(0), view);
-                        Log.e("TAG", "name = " + names.get(0));
                     }
                 }
             });
+        } else {
+            pager.setVisibility(View.VISIBLE);
+            isAnimInit = true;
         }
-    }
-
-    public void setShareLayout() {
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) ivShare.getLayoutParams();
-        layoutParams.width = getWindowWidth();
-        layoutParams.height = getWindowWidth();
-        ivShare.setLayoutParams(layoutParams);
     }
 
     //-----------------------------------------------------------------------

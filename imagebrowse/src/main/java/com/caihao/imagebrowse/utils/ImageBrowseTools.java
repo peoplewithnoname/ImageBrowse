@@ -41,12 +41,16 @@ public class ImageBrowseTools {
 
     private AfterIndexCallback afterIndexCallback;
 
-    public ImageBrowseTools(Activity activity, int index, String tag, ActivityRegisterCallback activityRegisterCallback, AfterIndexCallback afterIndexCallback) {
+    private List<String> tagList;
+
+    public ImageBrowseTools(Activity activity, int index, List<String> tagList, ActivityRegisterCallback activityRegisterCallback, AfterIndexCallback afterIndexCallback) {
         this.activity = activity;
         this.index = index;
-        this.tag = tag;
+        this.tagList = tagList;
         this.activityRegisterCallback = activityRegisterCallback;
         this.afterIndexCallback = afterIndexCallback;
+        if (this.tagList == null) this.tagList = new ArrayList<>();
+        if (this.tagList.size() == 1) this.tag = this.tagList.get(0);
         createCallback();
     }
 
@@ -59,6 +63,7 @@ public class ImageBrowseTools {
                 @Override
                 public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                     super.onMapSharedElements(names, sharedElements);
+                    if (urls == null || urls.size() < 2) return;
                     if (activityRegisterCallback == null) return;
                     View view = activityRegisterCallback.getView(index);
                     String transitionName = TRANSITION + index;
@@ -68,27 +73,18 @@ public class ImageBrowseTools {
                     sharedElements.clear();
                     sharedElements.put(names.get(0), view);
                 }
-
-                @Override
-                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                    for (int i = 0; i < sharedElements.size(); i++) {
-                        ViewCompat.setTransitionName(sharedElements.get(i), TRANSITION);
-                    }
-                    for (int i = 0; i < sharedElementSnapshots.size(); i++) {
-                        ViewCompat.setTransitionName(sharedElementSnapshots.get(i), TRANSITION);
-                    }
-                }
             });
-            ImageBrowseBus.getInstance().save(tag, new ImageBrowseCallback() {
-                @Override
-                public void setIndex(int i) {
-                    index = i;
-                    if (afterIndexCallback != null) {
-                        afterIndexCallback.after(index);
+            for (int i = 0; i < tagList.size(); i++) {
+                ImageBrowseBus.getInstance().save(tagList.get(i), new ImageBrowseCallback() {
+                    @Override
+                    public void setIndex(int i) {
+                        index = i;
+                        if (afterIndexCallback != null) {
+                            afterIndexCallback.after(index);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -98,7 +94,7 @@ public class ImageBrowseTools {
 
         private int index;
 
-        private String tag;//key
+        private List<String> tagList;//key
 
         private ActivityRegisterCallback activityRegisterCallback;
 
@@ -124,13 +120,16 @@ public class ImageBrowseTools {
             return this;
         }
 
-        public Builder setTag(String tag) {
-            this.tag = tag;
+        public Builder addTag(String tag) {
+            if (tagList == null) {
+                tagList = new ArrayList<>();
+            }
+            tagList.add(tag);
             return this;
         }
 
         public ImageBrowseTools build() {
-            return new ImageBrowseTools(activity, 0, tag, activityRegisterCallback, afterIndexCallback);
+            return new ImageBrowseTools(activity, 0, tagList, activityRegisterCallback, afterIndexCallback);
         }
 
     }
@@ -159,10 +158,34 @@ public class ImageBrowseTools {
     }
 
     /**
-     * 开始图片预览
+     * 开始图片预览(带TAG)
      *
      * @param view
      * @param index
+     */
+    public void start(View view, List<String> urlList, int index, String tag) {
+        this.urls = urlList;
+        this.index = index;
+        this.tag = tag;
+        ViewCompat.setTransitionName(view, TRANSITION + index);
+        final Intent intent = new Intent(activity, ImageBrowseActivity.class);
+        intent.putExtra("key", tag);
+        intent.putExtra("urlList", (Serializable) urls);
+        intent.putExtra("index", index);
+        final ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, TRANSITION + index);
+        loadImage(activity, urls.get(index), new ImageLoadCallback() {
+            @Override
+            public void loadOver(Drawable drawable) {
+                activity.startActivity(intent, option.toBundle());
+            }
+        });
+    }
+
+    /**
+     * 开始图片预览
+     *
+     * @param view
+     * @param url
      */
     public void start(View view, String url) {
         if (TextUtils.isEmpty(url)) {
@@ -184,6 +207,10 @@ public class ImageBrowseTools {
 
     public void setAfterIndexCallback(AfterIndexCallback afterIndexCallback) {
         this.afterIndexCallback = afterIndexCallback;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     //--------------------------------------------图片加载------------------------------------------------

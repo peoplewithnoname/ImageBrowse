@@ -1,5 +1,7 @@
 package com.caihao.imagebrowse;
 
+import android.text.TextUtils;
+
 import java.util.HashMap;
 
 /**
@@ -77,11 +79,14 @@ public class ImageBrowseBus {
     public void remove(String key) {
         if (map != null) {
             for (String strKey : map.keySet()) {
-                if (strKey.equals(key)) {
-                    ImageBrowseCallback callback = map.remove(key);
-                    callback = null;
-                    break;
+                if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(strKey)) {
+                    if (key.equals(strKey)) {
+                        ImageBrowseCallback callback = map.remove(key);
+                        callback = null;
+                        break;
+                    }
                 }
+
             }
         }
     }

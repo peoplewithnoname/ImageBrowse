@@ -1,4 +1,4 @@
-package com.caihao.simple;
+package com.caihao.simple.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

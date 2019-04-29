@@ -4,15 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/ivClick"
+    <Button
+        android:id="@+id/btn0"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="单张图片查看" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <Button
+        android:id="@+id/btn1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="多张图片查看" />
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="混合多张图片查看" />
 
 </LinearLayout>
