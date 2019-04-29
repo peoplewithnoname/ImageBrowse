@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.caihao.imagebrowse.ActivityRegisterCallback;
 import com.caihao.imagebrowse.AfterIndexCallback;
+import com.caihao.imagebrowse.ImageBrowseBus;
 import com.caihao.imagebrowse.utils.ImageBrowseTools;
 import com.caihao.simple.MainActivity;
 import com.caihao.simple.R;
@@ -87,5 +88,9 @@ public class ManyImageBrowseActivity extends AppCompatActivity {
         }
     };
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageBrowseBus.getInstance().remove(TAG);
+    }
 }

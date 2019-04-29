@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.caihao.imagebrowse.ActivityRegisterCallback;
 import com.caihao.imagebrowse.AfterIndexCallback;
+import com.caihao.imagebrowse.ImageBrowseBus;
 import com.caihao.imagebrowse.utils.ImageBrowseTools;
 import com.caihao.simple.MainActivity;
 import com.caihao.simple.R;
@@ -135,4 +136,11 @@ public class MixImageBrowseActivity extends AppCompatActivity {
             imageBrowseTools.start(view, adapter1.getAllData(), position, TAG1);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageBrowseBus.getInstance().remove(TAG0);
+        ImageBrowseBus.getInstance().remove(TAG1);
+    }
 }
