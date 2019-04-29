@@ -75,7 +75,7 @@ public class ImageBrowseActivity extends AppCompatActivity {
     }
 
     private void initLisenter() {
-        //多张骨片的时候需要技术回调
+        //多张图片的时候需要回调
         if (urlList.size() > 1) {//多张图片
             tvCurr.setText((index + 1) + "/" + urlList.size());
             ImageBrowseCallback callback = ImageBrowseBus.getInstance().get(key);

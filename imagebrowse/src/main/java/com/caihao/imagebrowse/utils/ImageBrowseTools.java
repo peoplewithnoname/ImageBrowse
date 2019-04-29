@@ -135,7 +135,7 @@ public class ImageBrowseTools {
     }
 
     /**
-     * 开始图片预览
+     * 开始多张图片预览
      *
      * @param view
      * @param index
@@ -158,31 +158,18 @@ public class ImageBrowseTools {
     }
 
     /**
-     * 开始图片预览(带TAG)
+     * 开始多张图片预览(带TAG)
      *
      * @param view
      * @param index
      */
     public void start(View view, List<String> urlList, int index, String tag) {
-        this.urls = urlList;
-        this.index = index;
         this.tag = tag;
-        ViewCompat.setTransitionName(view, TRANSITION + index);
-        final Intent intent = new Intent(activity, ImageBrowseActivity.class);
-        intent.putExtra("key", tag);
-        intent.putExtra("urlList", (Serializable) urls);
-        intent.putExtra("index", index);
-        final ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, TRANSITION + index);
-        loadImage(activity, urls.get(index), new ImageLoadCallback() {
-            @Override
-            public void loadOver(Drawable drawable) {
-                activity.startActivity(intent, option.toBundle());
-            }
-        });
+        start(view, urlList, index);
     }
 
     /**
-     * 开始图片预览
+     * 开始单张图片预览
      *
      * @param view
      * @param url
@@ -197,21 +184,66 @@ public class ImageBrowseTools {
         start(view, urlList, 0);
     }
 
+    //----------------------------------------get/set方法--------------------------------------------------------
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public ActivityRegisterCallback getActivityRegisterCallback() {
+        return activityRegisterCallback;
     }
 
     public void setActivityRegisterCallback(ActivityRegisterCallback activityRegisterCallback) {
         this.activityRegisterCallback = activityRegisterCallback;
     }
 
+    public AfterIndexCallback getAfterIndexCallback() {
+        return afterIndexCallback;
+    }
+
     public void setAfterIndexCallback(AfterIndexCallback afterIndexCallback) {
         this.afterIndexCallback = afterIndexCallback;
     }
 
-    public String getTag() {
-        return tag;
+    public List<String> getTagList() {
+        return tagList;
     }
+
+    public void setTagList(List<String> tagList) {
+        this.tagList = tagList;
+    }
+
+
+    //----------------------------------------get/set方法--------------------------------------------------------
 
     //--------------------------------------------图片加载------------------------------------------------
 
